@@ -11,7 +11,7 @@
         <th></th>
     </thead>
     <tbody>
-        @foreach ($supports as $support)
+        @foreach ($supports->items() as $support)
             <tr>
                 <td>{{ $support->subject }}</td>
                 <td>{{ $support->status }}</td>
@@ -26,3 +26,8 @@
         @endforeach
     </tbody>
 </table>
+
+<x-pagination 
+    :paginator="$supports" 
+    :appends="$filters"
+/>

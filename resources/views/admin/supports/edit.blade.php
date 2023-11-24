@@ -1,15 +1,12 @@
 <h1>Dúvida #{{ $support->id }}</h1>
 
-@if ($errors->any())
-    @foreach ($errors->all() as $error)
-        {{ $error }}
-    @endforeach
-@endif
+<x-alert />
 
 <form method="POST" action="{{ route('supports.update', $support->id) }}">
     @csrf()
     @method('PUT')
-    <input type="text" placeholder="Assunto" name="subject" id="subject" value="{{ $support->subject }}" /><br />
-    <textarea name="body" id="body" cols="30" rows="10" placeholder="Descrição">{{ $support->body }}</textarea><br />
+    @include('admin.supports.partials.form', [
+        'support' => $support
+    ])
     <button type="submit">Atualizar</button>
 </form>
