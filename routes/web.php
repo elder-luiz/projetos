@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\SupportStatusEnum;
 use App\Http\Controllers\Admin\{SupportController};
 use App\Http\Controllers\Site\SiteController;
 use Illuminate\Support\Facades\Route;
