@@ -1,6 +1,16 @@
-<h1>Listagem dos suportes</h1>
+@extends('admin.layouts.app')
 
-<a href="{{ route('supports.create') }}">Criar dúvida</a>
+@section('title', 'Suportes')
+
+@section('header')
+
+@include('admin.supports.partials.header', [
+    'total' => $supports->total()
+])
+
+@endsection
+
+@section('content')
 
 <table>
     <thead>
@@ -31,3 +41,4 @@
     :paginator="$supports" 
     :appends="$filters"
 />
+@endsection
