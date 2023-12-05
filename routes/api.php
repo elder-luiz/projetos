@@ -3,9 +3,16 @@
 // use Illuminate\Http\Request;
 
 use App\Http\Controllers\Api\ApiSupportController;
+use App\Http\Controllers\Api\Auth\ApiAuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::apiResource('/supports', ApiSupportController::class);
+Route::post('/login', [ApiAuthController::class, 'login']);
+Route::post('/logout', [ApiAuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::get('/me', [ApiAuthController::class, 'currentUser'])->middleware('auth:sanctum');
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::apiResource('/supports', ApiSupportController::class);
+});
 
 /*
 |--------------------------------------------------------------------------
