@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\{SupportController};
+use App\Http\Controllers\Admin\{ReplySupportController, SupportController};
 use App\Http\Controllers\Site\SiteController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +34,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //GET
+    Route::post('/supports/{id}/replies', [ReplySupportController::class, 'store'])->name('replies.store');
+    Route::delete('/supports/{id}/replies/{reply}', [ReplySupportController::class, 'destroy'])->name('replies.destroy');
+    Route::get('/supports/{id}/replies', [ReplySupportController::class, 'index'])->name('replies.index');
+
     Route::get('/supports', [SupportController::class, 'index'])->name('supports.index') ;
     Route::get('/supports/create', [SupportController::class, 'create'])->name('supports.create') ;
     Route::get('/supports/{id}', [SupportController::class, 'show'])->name('supports.show') ;

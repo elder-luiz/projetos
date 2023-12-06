@@ -2,35 +2,35 @@
 
 namespace App\Models;
 
-use App\Enums\SupportStatusEnum;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Support extends Model
+class ReplySupport extends Model
 {
     use HasFactory, HasUuids;
 
+    protected $table = 'replies_support';
     protected $fillable = [
-        'subject',
-        'body',
-        'status'
+        'support_id',
+        'user_id',
+        'content'
     ];
 
-    public function status() : Attribute {
+    public function createdAt() : Attribute {
         return Attribute::make(
-            set: fn (SupportStatusEnum $status) => $status->name
+            get: fn (string $createdAt) => Carbon::make($createdAt)->format('d/m/Y H:i')
         );
     }
-
+    
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
-    
-    public function replies(): HasMany {
-        return $this->hasMany(ReplySupport::class);
+
+    public function support(): BelongsTo {
+        return $this->belongsTo(Support::class);
     }
 }

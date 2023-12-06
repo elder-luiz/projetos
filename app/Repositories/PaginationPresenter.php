@@ -3,6 +3,7 @@ namespace App\Repositories;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use stdClass;
+use App\Repositories\Contracts\PaginationInterface;
 
 class PaginationPresenter implements PaginationInterface
 {

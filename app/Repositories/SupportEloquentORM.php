@@ -3,11 +3,11 @@
 namespace App\Repositories;
 
 use App\Models\Support;
-use App\Repositories\SupportRepositoryInterface;
+use App\Repositories\Contracts\SupportRepositoryInterface;
 use App\DTO\Supports\CreateSupportDTO;
 use App\DTO\Supports\UpdateSupportDTO;
 use stdClass;
-use App\Repositories\PaginationInterface;
+use App\Repositories\Contracts\PaginationInterface;
 
 class SupportEloquentORM implements SupportRepositoryInterface
 {
