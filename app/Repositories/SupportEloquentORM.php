@@ -8,22 +8,20 @@ use App\DTO\Supports\CreateSupportDTO;
 use App\DTO\Supports\UpdateSupportDTO;
 use stdClass;
 use App\Repositories\Contracts\PaginationInterface;
+use Illuminate\Support\Facades\Gate;
 
 class SupportEloquentORM implements SupportRepositoryInterface
 {
     public function __construct(
         protected Support $model
-    )
-    {
-        
-    }
+    ) {}
 
     public function paginate(int $page = 1, int $totalPerPage = 15, string $filter = null) : PaginationInterface {
         $result = $this->model
             ->where(function ($query) use ($filter){
                 if ($filter) {
                     $query->where('subject', $filter);
-                    $query->where('body', 'like', "%{$filter}%");
+                    $query->orWhere('body', 'like', "%{$filter}%");
                 }
             })
             ->paginate($totalPerPage, ['*'], 'page', $page);
@@ -35,7 +33,7 @@ class SupportEloquentORM implements SupportRepositoryInterface
             ->where(function ($query) use ($filter){
                 if ($filter) {
                     $query->where('subject', $filter);
-                    $query->where('body', 'like', "%{$filter}%");
+                    $query->orWhere('body', 'like', "%{$filter}%");
                 }
             })
             ->get()
@@ -43,7 +41,7 @@ class SupportEloquentORM implements SupportRepositoryInterface
     }
 
     public function findOne(string $id) : stdClass|null{
-        $support = $this->model->find($id);
+        $support = $this->model->with('user')->find($id);
 
         if (!$support) {
             return null;
@@ -53,7 +51,13 @@ class SupportEloquentORM implements SupportRepositoryInterface
     }
 
     public function delete(string $id) : void{
-        $this->model->findOrFail($id)->delete();
+        $support = $this->model->findOrFail($id);
+
+        if (Gate::denies('owner', $support->user->id)) {
+            abort(403, 'Not Authorized.');
+        }
+
+        $support->delete();
     }
 
     public function new(CreateSupportDTO $dto) : stdClass{
@@ -67,6 +71,10 @@ class SupportEloquentORM implements SupportRepositoryInterface
     public function update(UpdateSupportDTO $dto) : stdClass|null{
         if(!$support = $this->model->find($dto->id)){
             return null;
+        }
+
+        if (Gate::denies('owner', $support->user->id)) {
+            abort(403, 'Not Authorized.');
         }
 
         $support->update((array) $dto);
