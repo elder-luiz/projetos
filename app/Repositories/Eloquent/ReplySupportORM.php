@@ -47,15 +47,15 @@ class ReplySupportORM implements ReplyRepositoryInterface
     }
 
     protected function findSupportOwnerEmail(string $id) : string{
-        $reply = $this->model->find($id);
+        $reply = $this->model
+                    ->with('support.user')
+                    ->find($id);
 
         if (!$reply) {
             return null;
         }
 
-        $support = $this->supportModel->findOne($reply->support_id);
-
-        return $support->user['email'];
+        return $reply->support['user']['email'];
     }
 }
 

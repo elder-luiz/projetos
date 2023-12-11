@@ -8,7 +8,6 @@ use App\DTO\Supports\UpdateSupportDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateSupport;
 use App\Http\Resources\SupportResource;
-use App\Models\Support;
 use App\Services\SupportService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
@@ -40,7 +39,9 @@ class ApiSupportController extends Controller
     {
         $support = $this->service->new(CreateSupportDTO::makeFromRequest($request));
 
-        return new SupportResource($support);
+        return (new SupportResource($support))
+            ->response()
+            ->setStatusCode(HttpResponse::HTTP_CREATED);;
     }
 
     /**

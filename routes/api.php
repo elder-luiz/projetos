@@ -2,6 +2,7 @@
 
 // use Illuminate\Http\Request;
 
+use App\Http\Controllers\Api\ApiReplySupportController;
 use App\Http\Controllers\Api\ApiSupportController;
 use App\Http\Controllers\Api\Auth\ApiAuthController;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,9 @@ Route::post('/logout', [ApiAuthController::class, 'logout'])->middleware('auth:s
 Route::get('/me', [ApiAuthController::class, 'currentUser'])->middleware('auth:sanctum');
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/replies/{support_id}', [ApiReplySupportController::class, 'getRepliesFromSupport']);
+    Route::post('/replies/{support_id}', [ApiReplySupportController::class, 'createNewReply']);
+
     Route::apiResource('/supports', ApiSupportController::class);
 });
 
